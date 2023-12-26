@@ -44,6 +44,8 @@ class City(JsonFile):
     population: int
     subject: str
     district: str
+    latitude: float
+    longitude: float
     coords: dict
     is_used: bool = False
     is_badchar: bool = True
@@ -75,7 +77,16 @@ class Cities(JsonFile):
         # Загружаем города из JSON
         cities_data = self.read_json('cities.json')
         # Создаем список городов
-        cities_list_set = [City(**item) for item in cities_data]
+        # cities_list_set = [City(**item) for item in cities_data]
+        cities_list_set = [
+            City(
+                item['name'],
+                item['population'],
+                item['subject'],
+                item['district'],
+                item['coords']['lat'],
+                item['coords']['lon'],
+                item['coords']) for item in cities_data]
         # Помечаем города "хорошими буквами" - is_badchar = False
         for city in cities_list_set:
             for city_ in cities_list_set:
@@ -159,6 +170,19 @@ class CityGame(JsonFile):
                 return True
         return False
 
+    def stop_game(self, stop: str):
+        """
+        Метод для завершения игры
+        """
+        if stop.lower() == "стоп":
+            print(f'Вы остановили игру. Вы проиграли! на {self.step} ходу')
+            self.stop = True
+            self.winner = 'Компьютер'
+            self.save_game_state()
+            return True
+        else:
+            return False
+
     def included_in_badchar(self, city: str) -> bool:
         """
         Выводим проверку на вхождение в список "плохих букв"
@@ -220,12 +244,6 @@ class CityGame(JsonFile):
             self.upd_cities_list(city_input)
             # Делаем шаг
             self.step += 1
-        # Если пользователь ввел "стоп" - завершаем игру
-        elif city_input.lower() == "стоп":
-            print(f'Вы остановили игру. Вы проиграли! на {self.step} ходу')
-            self.winner = 'Компьютер'
-            self.save_game_state()
-            self.stop = True
         elif not self.is_valid_city(city_input) and not self.bad_char:
             # Города нет ни в списке городов, ни в списке "плохих букв",
             # ни в списке использованных - выводим сообщение
@@ -336,6 +354,9 @@ class GameManager:
                 city_input = input("Введите название города: ")
                 # Проверяем завершение игры
                 if not self.city_game.check_game_over():
+                    # Если пользователь ввел "стоп" - завершаем игру
+                    if self.city_game.stop_game(city_input):
+                        break
                     # Проверяем корректность ввода по последнему символу в названии города
                     if not self.city_game.last_char_check(city_input):
                         continue
