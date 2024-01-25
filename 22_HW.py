@@ -40,11 +40,11 @@ class PizzaBuilder:
         self.size_factory = size_factory
 
     # Метод для сборки пиццы
-    def build_pizza(self) -> str:
-        cheese = self.ingredient_factory.create_cheese('Пармезан')
-        sauce = self.ingredient_factory.create_sauce('Кетчуп')
-        size = self.size_factory.create_size('Большая')
-        return f'{size} пицца с ингредиентами: {cheese} и {sauce}.'
+    def build_pizza(self, cheese: str, sauce: str, size: str) -> str:
+        self.cheese = cheese
+        self.sauce = sauce
+        self.size = size
+        return f'{self.size} пицца с ингредиентами: {self.cheese} и {self.sauce}.'
 
 
 # Метод для создания пиццы
@@ -52,7 +52,7 @@ def create_pizza():
     ingredient_factory = DodoIngredientFactory()
     size_factory = SizeFactory()
     builder = PizzaBuilder(ingredient_factory, size_factory)
-    pizza = builder.build_pizza()
+    pizza = builder.build_pizza('Пармезан', 'Кетчуп', 'Большая')
     return pizza
 
 
