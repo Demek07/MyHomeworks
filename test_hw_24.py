@@ -2,7 +2,7 @@ import os
 import pytest
 import requests
 
-os.system('cls')
+# os.system('cls')
 
 cities = [
     ('Москва', {"lon": 37.6156, "lat": 55.7522}),
