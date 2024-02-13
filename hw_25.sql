@@ -31,10 +31,10 @@ SELECT name, SEX FROM MarvelCharacters WHERE ALIGN="Bad Characters" and SEX NOT 
 --16 Персонажи с наибольшим числом появлений по полу
 SELECT name, APPEARANCES FROM MarvelCharacters WHERE sex="Male Characters" or sex="Female Characters" GROUP BY SEX
 --17 Сравнение популярности персонажей по цвету волос и глаз
-SELECT HAIR, EYE, count(*) as Итого FROM MarvelCharacters WHERE HAIR NOTNULL AND EYE NOTNULL GROUP BY HAIR, EYE ORDER BY Итого DESC
+SELECT HAIR, EYE, SUM(APPEARANCES) as Итого FROM MarvelCharacters WHERE HAIR NOTNULL AND EYE NOTNULL GROUP BY HAIR, EYE ORDER BY Итого DESC
 --18 Персонажи с максимальным количеством появлений в десятилетие
-SELECT name, Year, sum(APPEARANCES) AS Появлений FROM MarvelCharacters WHERE Year NOT NULL GROUP BY Year
+SELECT name, Year/10*10 as Десятилетие, APPEARANCES AS Появлений FROM MarvelCharacters WHERE Year NOT NULL and year>1940 GROUP BY Десятилетие
 --19 Герои и злодеи 80-х
-SELECT ALIGN, count(*) AS Количество_Good_Characters FROM MarvelCharacters WHERE (Year BETWEEN 1980 AND 1989) AND ALIGN="Good Characters" GROUP BY ALIGN
+SELECT ALIGN, count(*) AS Количество_Good_Characters FROM MarvelCharacters WHERE (Year BETWEEN 1980 AND 1989) AND ALIGN IN ("Good Characters", "Bad Characters") GROUP BY ALIGN
 --20 Самые популярные прически супергероев
 SELECT HAIR, APPEARANCES, count(*) as Количество_появлений FROM MarvelCharacters GROUP BY HAIR HAVING HAIR NOT NULL ORDER BY Количество_появлений DESC LIMIT 3
