@@ -20,8 +20,8 @@ SELECT name, APPEARANCES FROM MarvelCharacters WHERE APPEARANCES<10
 SELECT name, APPEARANCES FROM MarvelCharacters ORDER BY APPEARANCES DESC LIMIT 5
 --11 Персонажи, появившиеся только в одном десятилетии - 3806 - ошибка! у меня получается другое количество!
 SELECT name, FIRST_APPEARANCE FROM MarvelCharacters WHERE year BETWEEN 2000 and 2009
---12 Персонажи с самыми редкими цветами глаз - 34 - - ошибка! у меня получается другое количество!
-SELECT name, EYE FROM MarvelCharacters WHERE EYE="Pink Eyes" or EYE="Violet Eyes"
+--12 Персонажи с самыми редкими цветами глаз - 34
+SELECT name, EYE FROM MarvelCharacters WHERE EYE in ("Pink Eyes", "Violet Eyes", "Magenta Eyes")
 --13 Герои с публичной идентичностью, сортированные по году - 4528
 SELECT name, identify, FIRST_APPEARANCE FROM MarvelCharacters WHERE identify="Public Identity" ORDER BY Year
 --14 Персонажи с конкретным цветом волос и глаз, упорядоченные по имени - 99
@@ -37,4 +37,4 @@ SELECT name, Year/10*10 as Десятилетие, APPEARANCES AS Появлен
 --19 Герои и злодеи 80-х
 SELECT ALIGN, count(*) AS Количество_Good_Characters FROM MarvelCharacters WHERE (Year BETWEEN 1980 AND 1989) AND ALIGN IN ("Good Characters", "Bad Characters") GROUP BY ALIGN
 --20 Самые популярные прически супергероев
-SELECT HAIR, APPEARANCES, count(*) as Количество_появлений FROM MarvelCharacters GROUP BY HAIR HAVING HAIR NOT NULL ORDER BY Количество_появлений DESC LIMIT 3
+SELECT HAIR, SUM(APPEARANCES) as Количество_появлений FROM MarvelCharacters GROUP BY HAIR HAVING HAIR NOT NULL ORDER BY Количество_появлений DESC LIMIT 3
