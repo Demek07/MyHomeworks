@@ -31,7 +31,7 @@ def read_sql_queries(file_path: str) -> str:
     :param file_path: путь к файлу
     :return: возвращает содержимое файла
     """
-    with open(file_path, 'r', encoding='utf-8') as f:
+    with open('queries.sql', 'r', encoding='utf-8') as f:
         return f.read()
 
 
@@ -40,7 +40,6 @@ def execute_sql_script(cursor: sqlite3.Cursor, conn: sqlite3.Connection, sql_scr
     """
     Выполняет SQL скрипт
     :param cursor: курсор
-    :param conn: соединение
     :param sql_script: SQL скрипт
     """
     cursor.executescript(sql_script)
@@ -83,11 +82,11 @@ def get_city_data(city_name: str, db_path: str):
     # формируем SQL запрос
     query = f'''
     SELECT
-        city_name, lat, lon, population, s.name, d.name
+        city_name, lat, lon, population, s.subject_name, d.district_name
     FROM
         city
-    JOIN subject s ON city.subject_id = s.subject_id
-    JOIN district d ON city.district_id = d.district_id
+    JOIN subject s ON city.subject_id = s.id
+    JOIN district d ON city.district_id = d.id
     WHERE
         {city_name};
     '''
@@ -130,19 +129,19 @@ def main():
     list_of_subject = list(set(list_of_subject))
     # Заполняем таблицу subject данными
     print("Заполняем таблицу subject данными...")
-    query_add_subject = "INSERT INTO subject (name) VALUES (?)"
+    query_add_subject = "INSERT INTO subject (subject_name) VALUES (?)"
     execute_many_queries(cursor, query_add_subject, list_of_subject)
     conn.commit()
     # Заполняем таблицу district данными
     print("Заполняем таблицу district данными...")
-    query_add_district = "INSERT INTO district (name) VALUES (?)"
+    query_add_district = "INSERT INTO district (district_name) VALUES (?)"
     execute_many_queries(cursor, query_add_district, list_of_district)
     conn.commit()
 
     # Заполняем таблицу city данными полученными из cities.json (cities) и id из subject и district
     print("Заполняем таблицу city данными...")
     query_add_city = ("INSERT INTO city (city_name, lat, lon, population, subject_id, district_id) VALUES (?,?,?,?, "
-                      "(SELECT subject_id FROM subject WHERE name = ?), (SELECT district_id FROM district WHERE name "
+                      "(SELECT id FROM subject WHERE subject_name = ?), (SELECT id FROM district WHERE district_name "
                       "= ?))")
     execute_many_queries(cursor, query_add_city, cities)
     conn.commit()

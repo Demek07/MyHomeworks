@@ -9,14 +9,14 @@ DROP TABLE IF EXISTS subject;
 -- создаем необходимые таблицы
 CREATE TABLE
     IF NOT EXISTS subject (
-        subject_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        subject_name TEXT
     );
 
 CREATE TABLE
     IF NOT EXISTS district (
-        district_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        district_name TEXT
     );
 
 CREATE TABLE
@@ -28,8 +28,8 @@ CREATE TABLE
         population INTEGER,
         subject_id INTEGER,
         district_id INTEGER,
-        FOREIGN KEY (subject_id) REFERENCES subject (subject_id) ON DELETE CASCADE,
-        FOREIGN KEY (district_id) REFERENCES district (district_id) ON DELETE CASCADE
+        FOREIGN KEY (subject_id) REFERENCES subject (id) ON DELETE CASCADE,
+        FOREIGN KEY (district_id) REFERENCES district (id) ON DELETE CASCADE
     );
 
 -- создаем индекс
