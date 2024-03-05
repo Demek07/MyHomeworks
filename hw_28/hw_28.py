@@ -49,6 +49,7 @@ def get_data_from_csv(file_path: str) -> List[Dict[str, Union[int, str]]]:
             card_id = row['CardID']
             category = row['category']
             tags = json.loads(row['tags'])
+            # print(row)
             data_dict[card_id] = {'card_id': card_id, 'category': category, 'tags': tags}
 
     return list(data_dict.values())
@@ -215,11 +216,13 @@ def main():
 
     # запускаем поиск по тегу
     get_by_tag = input('Введите тег: ')
-    print(search_by_tag(DB_PATH, get_by_tag))
+    for item in search_by_tag(DB_PATH, get_by_tag):
+        print(item)
 
     # запускаем поиск по тексту вопроса или ответа
     get_by_text = input('Введите текст, который хотите искать: ')
-    print(search_by_text(DB_PATH, get_by_text))
+    for item in search_by_text(DB_PATH, get_by_text):
+        print(item)
 
 
 if __name__ == "__main__":
