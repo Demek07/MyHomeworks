@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load markdown_to_html %}
+{% load markdown_to_html_2 %}
+{% block content %}
+  <div class="card" style="width: 50rem;">
+    <div class="card-body">
+      <p class="card-text">{{ card.id_card }}</p>
+      <p class="card-text">{{ card.upload_date }}</p>
+      <p class="card-text">{{ card.views_count }}</p>
+      <p class="card-text">{{ card.favorites_count }}</p>
+      <p class="card-text">{{ card.category }}</p>
+      <p class="card-text">{{ card.tags }}</p>
+      <h5 class="card-title">{% markdown_to_html2 card.question %}</h5>
+      <p class="card-text">{% markdown_to_html card.answer %}</p>
+      <a href="{% url 'catalog' %}" class="btn btn-primary">Назад</a>
+    </div>
+  {% endblock content %}
