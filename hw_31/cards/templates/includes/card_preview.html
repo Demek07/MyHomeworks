@@ -1,0 +1,18 @@
+<div class="card">
+  <h4 class="card-header">{{ card.question }}</h4>
+  <div class="card-body">
+    <h5 class="card-title">{{ card.answer }}</h5>
+    <p class="card-text">Категрия: {{ card.category }}</p>
+    <p class="card-text">
+      Теги:
+      {% for tag in card.tags %}<span class="badge bg-secondary">{{ tag }}</span>{% endfor %}
+    </p>
+    <p class="card-text">Дата загрузки: {{ card.upload_date }} 👁‍🗨{{ card.views }} 🤍{{ card.adds }}</p>
+  </div>
+  <div class="card-footer">
+    <a href="{% url 'detail_card_by_id' card.id %}"
+       class="btn btn-secondary"
+       style="background-color: #1b5589">Подробнее</a>
+  </div>
+</div>
+<br>
