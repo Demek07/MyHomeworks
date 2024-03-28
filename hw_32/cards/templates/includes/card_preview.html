@@ -1,0 +1,21 @@
+{% load markdown_to_html %}
+<div class="card">
+  <h4 class="card-header">{% markdown_to_html card.question %}</h4>
+  <div class="card-body">
+    <h5 class="card-title">{% markdown_to_html card.answer|truncatechars:100 %}</h5>
+    <p class="card-text">Категрия: {{ card.category }}</p>
+    <p class="card-text">
+      Теги:
+      {% for tag in card.tags.all %}
+        <span class="badge bg-secondary"><a href="{% url 'get_cards_by_tag' tag_id=tag.pk %}" class="text-white">{{ tag.name }}</a></span>
+      {% endfor %}
+    </p>
+    <p class="card-text">Дата загрузки: {{ card.upload_date }} 👁‍🗨{{ card.views }} 🤍{{ card.adds }}</p>
+  </div>
+  <div class="card-footer">
+    <a href="{% url 'detail_card_by_id' card.id %}"
+       class="btn btn-secondary"
+       style="background-color: #1b5589">Подробнее</a>
+  </div>
+</div>
+<br>
