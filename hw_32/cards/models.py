@@ -9,6 +9,8 @@ class Card(models.Model):
     views = models.IntegerField(default=0, db_column='Views')
     adds = models.IntegerField(default=0, db_column='Favorites')
     tags = models.ManyToManyField('Tag', through='CardTag', related_name='cards', db_column='Tags')
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='cards', null=True, blank=True, default=None) 
+
 
     class Meta:
         db_table = 'Cards'  # имя таблицы в базе данных
@@ -48,11 +50,9 @@ class CardTag(models.Model):
 
 
 class Category(models.Model):
-    id = models.AutoField(primary_key=True, db_column='CategoryID')
-    name = models.CharField(max_length=100, db_column='Name')
+    name = models.CharField(max_length=120, unique=True, db_column='Name')
 
     class Meta:
-        db_table = 'Categories'
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 

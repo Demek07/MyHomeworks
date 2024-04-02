@@ -5,7 +5,7 @@
     <h4 class="card-header">{% markdown_to_html card.question %}</h4>
     <div class="card-body">
       <h5 class="card-title">{% markdown_to_html card.answer %}</h5>
-      <p class="card-text">Категрия: {{ card.category }}</p>
+      <p class="card-text">Категрия: {{ card.category.name }}</p>
       <p class="card-text">
         Теги:
         {% for tag in card.tags.all %}

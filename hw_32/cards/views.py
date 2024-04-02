@@ -38,7 +38,7 @@ def about(request):
     return render(request, 'about.html', info)
 
 
-@cache_page(60 * 15)
+# @cache_page(60 * 15)
 def catalog(request):
     # По умолчанию сортируем по дате загрузки
     sort = request.GET.get('sort', 'upload_date')
@@ -53,11 +53,11 @@ def catalog(request):
     else:
         order_by = f'-{sort}'
 
-    # cards_all = Card.objects.all().order_by(order_by)
-    cards_all = Card.objects.prefetch_related('tags').order_by(order_by)
+    cards_all = Card.objects.all().order_by(order_by)
+    # cards_all = Card.objects.prefetch_related('tags').order_by(order_by)
     # Пагинация
     paginator = Paginator(cards_all, 5)
-    page_number = request.GET.get('page', 1)
+    page_number = request.GET.get('page')
     cards = paginator.get_page(page_number)
     
     # return render(request, 'your_template.html', {'page_obj': page_obj})
@@ -66,6 +66,8 @@ def catalog(request):
         'cards': cards,
         'cards_count': len(cards_all),
         'menu': info['menu'],
+        'sort': sort,
+        'order': order,
     }
 
     return render(request, 'cards/catalog.html', context)
@@ -79,11 +81,26 @@ def get_categories(request):
     return render(request, 'base.html', info)
 
 
-def get_cards_by_category(request, slug):
+def get_cards_by_category(request, category_id):
     """
     Возвращает карточки по категории для представления в каталоге
     """
-    return HttpResponse(f'Cards by category {slug}')
+    # Добываем карточки из БД по категории
+    cards_all = Card.objects.filter(category__id=category_id)
+    # Подготавливаем контекст и отображаем шаблон
+    # Пагинация
+    paginator = Paginator(cards_all, 5)
+    page_number = request.GET.get('page', 1)
+    cards = paginator.get_page(page_number)
+
+    context = {
+        'cards': cards,
+        'cards_count': len(cards_all),
+        'menu': info['menu'],
+    }
+    
+    return render(request, 'cards/catalog.html', context)
+
 
 
 def get_cards_by_tag(request, tag_id):

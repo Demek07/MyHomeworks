@@ -19,3 +19,13 @@ def markdown_to_html(markdown_text: str) -> str:
     html_content = markdown.markdown(markdown_text, extensions=md_extensions)
     
     return mark_safe(html_content)
+
+
+@register.simple_tag
+def add_query_params(request, **kwargs):
+    updated = request.GET.copy()
+    for k, v in kwargs.items():
+        updated[k] = v
+
+
+    return request.build_absolute_uri('?'+updated.urlencode())

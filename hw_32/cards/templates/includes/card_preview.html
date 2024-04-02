@@ -3,7 +3,9 @@
   <h4 class="card-header">{% markdown_to_html card.question %}</h4>
   <div class="card-body">
     <h5 class="card-title">{% markdown_to_html card.answer|truncatechars:100 %}</h5>
-    <p class="card-text">Категрия: {{ card.category }}</p>
+    <p class="card-text">
+      Категрия: <a href="{% url 'get_cards_by_category' category_id=card.category.pk %}">{{ card.category.name }}</a>
+    </p>
     <p class="card-text">
       Теги:
       {% for tag in card.tags.all %}
