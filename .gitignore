@@ -162,3 +162,5 @@ cython_debug/
 *.rar
 *.xml
 *.iml
+*.db
+.env
