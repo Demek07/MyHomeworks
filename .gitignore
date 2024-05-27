@@ -164,3 +164,4 @@ cython_debug/
 *.iml
 *.db
 .env
+*.xml
